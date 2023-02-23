@@ -1,3 +1,5 @@
+const path = require('path')
+
 export const config = {
     //
     // ====================
@@ -24,7 +26,7 @@ export const config = {
     // will be called from there.
     //
     specs: [
-        './test/specs/**/*.js'
+        './test/specs/mobile.automation.js'
     ],
     // Patterns to exclude.
     exclude: [
@@ -53,18 +55,15 @@ export const config = {
     // https://saucelabs.com/platform/platform-configurator
     //
     capabilities: [{
-    
-        // maxInstances can get overwritten per capability. So if you have an in-house Selenium
-        // grid with only 5 firefox instances available you can make sure that not more than
-        // 5 instances get started at a time.
-        maxInstances: 5,
-        //
-        browserName: 'chrome',
-        acceptInsecureCerts: true
-        // If outputDir is provided WebdriverIO can capture driver session logs
-        // it is possible to configure which logTypes to include/exclude.
-        // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
-        // excludeDriverLogs: ['bugreport', 'server'],
+        platformName                : "Android",
+        "appium:automationName"     : 'UiAutomator2',
+        "appium:deviceName"         : 'jati A52',
+        "appium:platformVersion"    : '12.0',
+        "appium:app"                : path.join(process.cwd(),'./test/apk/Diet_meal.apk'),
+        "appium:appPackage"         : "io.appium.android.apis",
+        "appium:appActivity"        : "Diet_meals",
+        "appium:noReset"            : true,
+        "appium:forceAppLaunch"     : true,
     }],
     //
     // ===================
@@ -97,7 +96,7 @@ export const config = {
     // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
     // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
     // gets prepended directly.
-    baseUrl: 'http://localhost',
+    baseUrl: 'http://127.0.0.1',
     //
     // Default timeout for all waitFor* commands.
     waitforTimeout: 10000,
@@ -113,7 +112,19 @@ export const config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['appium'],
+    services: [
+        [   
+            'appium',
+            {
+                args : {
+                    address : '127.0.0.1',
+                    port    : 4723,
+                },
+                logPath : './log',
+                command : 'appium'
+            }
+        ]
+    ],
     
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
